@@ -52,6 +52,8 @@ async def play_game(mode="standard"):
         await show_help_screen(mode)
         config.has_seen_help = True
 
+    touch_start_pos = None
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -59,6 +61,7 @@ async def play_game(mode="standard"):
                 return
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
+                touch_start_pos = event.pos
                 if (x - (config.WIDTH - 40))**2 + (y - 75)**2 <= 15**2:
                     await show_help_screen(mode)
                     continue
@@ -73,6 +76,23 @@ async def play_game(mode="standard"):
                                 engine.player_pos = [r, c]
                                 engine.grass_tiles.add((r, c))
                                 
+            if event.type == pygame.MOUSEBUTTONUP and touch_start_pos:
+                dx = event.pos[0] - touch_start_pos[0]
+                dy = event.pos[1] - touch_start_pos[1]
+                touch_start_pos = None
+                
+                # If drag distance > 30px, treat as swipe
+                if abs(dx) > 30 or abs(dy) > 30:
+                    key_event = None
+                    if abs(dx) > abs(dy):
+                        key_event = pygame.K_RIGHT if dx > 0 else pygame.K_LEFT
+                    else:
+                        key_event = pygame.K_DOWN if dy > 0 else pygame.K_UP
+                    
+                    if key_event:
+                        # Post a simulated keyboard event to use the existing movement logic
+                        pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=key_event))
+            
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F11:
                     config.toggle_fullscreen()
