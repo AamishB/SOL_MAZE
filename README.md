@@ -1,7 +1,7 @@
 # <img src="assets/icon.png" style="height:25px;width:25px"></img> <img src="assets/title.png" style="height:25px"></img>
 Welcome to **Sol Maze**, a grid-based maze game built with Pygame where the core mechanic revolves around the duality of light and shadow during the solstice, but it also features various [modes](#modes) to play.
 
-### Link : [SOL_MAZE](https://github.com/AamishB/SOL_MAZE)
+### Link : [SOL_MAZE](https://aamishb.github.io/SOL_MAZE/)
 
 ## 🎮 Gameplay (Standard Mode)
 - **Day Phase**: Light zones are walkable paths. Shadows are impassable walls.
