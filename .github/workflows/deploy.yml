@@ -1,0 +1,48 @@
+name: Build and Deploy Pygame to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pygbag
+
+      - name: Build game
+        # Pygbag builds everything in the current directory and outputs to build/web/
+        run: python -m pygbag --build --template static/default.tmpl .
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
