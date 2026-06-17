@@ -459,8 +459,8 @@ class SolMazeEngine:
 
     @property
     def is_day(self):
-        """Day phase when sun is above horizon (0 to 180 degrees)."""
-        return 0 <= self.sun_angle < 180
+        """Day phase when sun is above horizon (0 to 225 degrees)."""
+        return 0 <= self.sun_angle < 225
 
     def is_passable(self, r, c):
         """Check if cell (r, c) is currently walkable."""
@@ -823,7 +823,7 @@ class SolMazeEngine:
             self.move_count += 1
             if self.move_count % 10 == 0:
                 was_night = not self.is_day
-                self.sun_angle = 180.0 if self.sun_angle == 0.0 else 0.0
+                self.sun_angle = 225.0 if self.sun_angle == 0.0 else 0.0
                 
                 if was_night:
                     # Shifting to Day: check if player is on a pit

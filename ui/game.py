@@ -53,7 +53,7 @@ async def play_game(mode="standard"):
         config.has_seen_help = True
 
     touch_start_pos = None
-    
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -75,7 +75,7 @@ async def play_game(mode="standard"):
                             if (r, c) not in getattr(engine, "trash_tiles", set()):
                                 engine.player_pos = [r, c]
                                 engine.grass_tiles.add((r, c))
-                                
+
             if event.type == pygame.MOUSEBUTTONUP and touch_start_pos:
                 dx = event.pos[0] - touch_start_pos[0]
                 dy = event.pos[1] - touch_start_pos[1]
@@ -92,7 +92,8 @@ async def play_game(mode="standard"):
                     if key_event:
                         # Post a simulated keyboard event to use the existing movement logic
                         pygame.event.post(pygame.event.Event(pygame.KEYDOWN, key=key_event))
-            
+
+                                
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F11:
                     config.toggle_fullscreen()
@@ -103,8 +104,8 @@ async def play_game(mode="standard"):
                 if event.key in (pygame.K_TAB, pygame.K_s):
                     current_angle = engine.sun_angle
                     if engine.is_day:
-                        degrees_to_next = 180.0 - current_angle
-                        target_angle = 180.0
+                        degrees_to_next = 225.0 - current_angle
+                        target_angle = 225.0
                     else:
                         degrees_to_next = 360.0 - current_angle
                         target_angle = 0.0

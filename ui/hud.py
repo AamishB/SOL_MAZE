@@ -69,9 +69,26 @@ def draw_hud(engine, moves):
         dial_radius = 30
         pygame.draw.circle(config.screen, (30, 30, 45), dial_center, dial_radius)
         pygame.draw.circle(config.screen, (80, 80, 110), dial_center, dial_radius, 2)
-        pygame.draw.line(config.screen, (80, 80, 110), (dial_center[0] - dial_radius, dial_center[1]), (dial_center[0] + dial_radius, dial_center[1]), 1)
         
-        rad_angle = math.radians(engine.sun_angle - 180)
+        # Offset angle to make the 225-degree day slice symmetrical (centered at the top)
+        # Day = 225 degrees. Night = 135 degrees.
+        # Midpoint of day is 112.5. We want 112.5 to point straight UP (-90 degrees in Pygame).
+        # Offset = -90 - 112.5 = -202.5
+        vis_offset = -202.5
+        
+        # Draw sunrise threshold line (sun_angle = 0)
+        sunrise_rad = math.radians(0 + vis_offset)
+        start_x = dial_center[0] + math.cos(sunrise_rad) * dial_radius
+        start_y = dial_center[1] + math.sin(sunrise_rad) * dial_radius
+        pygame.draw.line(config.screen, (80, 80, 110), dial_center, (start_x, start_y), 1)
+        
+        # Draw sunset threshold line (sun_angle = 225)
+        sunset_rad = math.radians(225 + vis_offset)
+        end_x = dial_center[0] + math.cos(sunset_rad) * dial_radius
+        end_y = dial_center[1] + math.sin(sunset_rad) * dial_radius
+        pygame.draw.line(config.screen, (80, 80, 110), dial_center, (end_x, end_y), 1)
+        
+        rad_angle = math.radians(engine.sun_angle + vis_offset)
         dot_x = dial_center[0] + math.cos(rad_angle) * (dial_radius - 6)
         dot_y = dial_center[1] + math.sin(rad_angle) * (dial_radius - 6)
         dot_color = (255, 200, 50) if engine.is_day else (180, 160, 255)
